@@ -174,7 +174,8 @@ static GSPN_ERR_CODE_E gspn_iommu_map(GSPN_CONTEXT_T *gspnCtx,GSPN_KCMD_INFO_T *
 #define GSPN_LAYER_MAP(lx_info)\
     if(lx_info.layer_en == 1 && lx_info.addr.plane_y == 0 && lx_info.addr_info.share_fd) {\
         data.dmabuf = lx_info.addr_info.dmabuf;\
-        if(sprd_ion_get_gsp_addr(&data)) {\
+        //if(sprd_ion_get_gsp_addr(&data)) {\
+				if(sprd_ion_get_addr(ION_GSP, &data)) {\
             GSPN_LOGE("map failed!\n");\
             return GSPN_K_IOMMU_MAP_ERR;\
         }\
@@ -199,9 +200,14 @@ static GSPN_ERR_CODE_E gspn_iommu_map(GSPN_CONTEXT_T *gspnCtx,GSPN_KCMD_INFO_T *
 
 static int gspn_iommu_unmap(GSPN_CONTEXT_T *gspnCtx,GSPN_KCMD_INFO_T *kcmd)
 {
+    struct ion_addr_data data;
+		memset(&data, 0, sizeof(data));
+		
 #define GSPN_LAYER_UNMAP(lx_info)\
     if(lx_info.addr_info.share_fd) {\
-        sprd_ion_free_gsp_addr(lx_info.addr_info.share_fd);\
+        //sprd_ion_free_gsp_addr(lx_info.addr_info.share_fd);\
+				data.fd_buffer = lx_info.addr_info.share_fd;\
+				sprd_ion_free_addr(ION_GSP, &data);\
     }
     GSPN_LAYER_UNMAP(kcmd->src_cmd.l0_info);
     GSPN_LAYER_UNMAP(kcmd->src_cmd.l1_info);

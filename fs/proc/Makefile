@@ -33,3 +33,7 @@ proc-$(CONFIG_PROC_DEVICETREE)	+= proc_devtree.o
 proc-$(CONFIG_PRINTK)	+= kmsg.o
 proc-$(CONFIG_PROC_PAGE_MONITOR)	+= page.o
 proc-$(CONFIG_PROC_AVC) += proc_avc.o
+
+ifeq ($(CONFIG_PROC_DEVICETREE),y)
+ccflags-y += -DCONFIG_PROC_DEVICETREE
+endif

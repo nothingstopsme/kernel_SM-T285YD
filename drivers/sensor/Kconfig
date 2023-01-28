@@ -135,13 +135,6 @@ config SENSORS_SX9310_DEFENCE_CODE_FOR_TA_NOISE
           This option enables defence code for TA noise using
           SemTech sx9310 device driver.
 	  
-config SENSORS_HAS_GPIO_LDO
-	depends on SENSORS_SX9310
-	tristate "SX9310 driver"
-	default n
-	help
-	  This option enables grip sensors using
-	  SemTech sx9310 device driver.
 
 endif
 endmenu

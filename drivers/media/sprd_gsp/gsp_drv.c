@@ -437,7 +437,8 @@ static int GSP_Map(gsp_context_t *gspCtx)
     if(gspCtx->gsp_cfg.layer0_info.src_addr.addr_y == 0
        &&gspCtx->gsp_cfg.layer0_info.mem_info.share_fd) {
         data.fd_buffer = gspCtx->gsp_cfg.layer0_info.mem_info.share_fd;
-        if(sprd_ion_get_gsp_addr(&data)) {
+        //if(sprd_ion_get_gsp_addr(&data)) {
+				if(sprd_ion_get_addr(ION_GSP, &data)){
             printk("%s, L%d, error!\n",__func__,__LINE__);
             return -1;
         }
@@ -452,7 +453,8 @@ static int GSP_Map(gsp_context_t *gspCtx)
     if(gspCtx->gsp_cfg.layer1_info.src_addr.addr_y == 0
        &&gspCtx->gsp_cfg.layer1_info.mem_info.share_fd) {
         data.fd_buffer = gspCtx->gsp_cfg.layer1_info.mem_info.share_fd;
-        if(sprd_ion_get_gsp_addr(&data)) {
+        //if(sprd_ion_get_gsp_addr(&data)) {
+				if(sprd_ion_get_addr(ION_GSP, &data)){
             printk("%s, L%d, error!\n",__func__,__LINE__);
             return -1;
         }
@@ -468,7 +470,8 @@ static int GSP_Map(gsp_context_t *gspCtx)
     if(gspCtx->gsp_cfg.layer_des_info.src_addr.addr_y == 0
        &&gspCtx->gsp_cfg.layer_des_info.mem_info.share_fd) {
         data.fd_buffer = gspCtx->gsp_cfg.layer_des_info.mem_info.share_fd;
-        if(sprd_ion_get_gsp_addr(&data)) {
+        //if(sprd_ion_get_gsp_addr(&data)) {
+				if(sprd_ion_get_addr(ION_GSP, &data)){
             printk("%s, L%d, error!\n",__func__,__LINE__);
             return -1;
         }
@@ -486,14 +489,29 @@ static int GSP_Map(gsp_context_t *gspCtx)
 
 static int GSP_Unmap(gsp_context_t *gspCtx)
 {
+    struct ion_addr_data data;
+		memset(&data, 0, sizeof(data));
+
     if(gspCtx->gsp_cfg.layer0_info.mem_info.share_fd)
-        sprd_ion_free_gsp_addr(gspCtx->gsp_cfg.layer0_info.mem_info.share_fd);
+		{
+        //sprd_ion_free_gsp_addr(gspCtx->gsp_cfg.layer0_info.mem_info.share_fd);
+				data.fd_buffer = gspCtx->gsp_cfg.layer0_info.mem_info.share_fd;
+				sprd_ion_free_addr(ION_GSP, &data);
+		}
 
     if(gspCtx->gsp_cfg.layer1_info.mem_info.share_fd)
-        sprd_ion_free_gsp_addr(gspCtx->gsp_cfg.layer1_info.mem_info.share_fd);
+		{
+        //sprd_ion_free_gsp_addr(gspCtx->gsp_cfg.layer1_info.mem_info.share_fd);
+				data.fd_buffer = gspCtx->gsp_cfg.layer1_info.mem_info.share_fd;
+				sprd_ion_free_addr(ION_GSP, &data);
+		}
 
     if(gspCtx->gsp_cfg.layer_des_info.mem_info.share_fd)
-        sprd_ion_free_gsp_addr(gspCtx->gsp_cfg.layer_des_info.mem_info.share_fd);
+		{
+        //sprd_ion_free_gsp_addr(gspCtx->gsp_cfg.layer_des_info.mem_info.share_fd);
+				data.fd_buffer = gspCtx->gsp_cfg.layer_des_info.mem_info.share_fd;
+				sprd_ion_free_addr(ION_GSP, &data);
+		}
 
     return 0;
 }

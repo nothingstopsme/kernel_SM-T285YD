@@ -93,6 +93,7 @@ extern unsigned long g_dispc_base_addr;
 static unsigned PP[16];
 static int frame_count = 0;
 
+static int sprdfb_power(struct sprdfb_device *dev, int on);
 static int sprdfb_blank(int blank, struct fb_info *info);
 static int sprdfb_check_var(struct fb_var_screeninfo *var, struct fb_info *fb);
 static int sprdfb_pan_display(struct fb_var_screeninfo *var, struct fb_info *fb);
@@ -122,6 +123,7 @@ static struct fb_ops sprdfb_ops = {
 	.fb_mmap = sprdfb_mmap,
 #endif
 };
+
 
 #if defined(CONFIG_FB_LCD_OLED_BACKLIGHT)
 struct sprdfb_device *dev_panel =NULL;
@@ -407,6 +409,7 @@ static int sprdfb_ioctl(struct fb_info *info, unsigned int cmd,
 	case SPRD_FB_CHANGE_FPS:
 		{
 			int fps;
+			pr_debug(KERN_INFO "sprdfb: [%s]: SPRD_FB_CHANGE_FPS\n", __FUNCTION__);
 			result = copy_from_user(&fps, argp, sizeof(fps));
 			if (result) {
 				pr_err("%s: copy_from_user failed", __func__);
@@ -434,9 +437,15 @@ static int sprdfb_ioctl(struct fb_info *info, unsigned int cmd,
 
 	case SPRD_FB_SET_POWER_MODE:
 		result = copy_from_user(&power_mode, argp, sizeof(power_mode));
-		printk("sprdfb: [%s] : SPRD_FB_SET_POWER_MODE (%d)\n", __FUNCTION__, power_mode);
+		if(result)
+		{
+			printk("sprdfb: [%s] : copy_from_user() failed for SPRD_FB_SET_POWER_MODE )\n", __FUNCTION__);
+			break;
+		}
+		result = sprdfb_power(dev, power_mode);
+		pr_debug("sprdfb: [%s] : SPRD_FB_SET_POWER_MODE (%d), result = %d\n", __FUNCTION__, power_mode, result);
 		break;
-
+	
 	default:
 		printk(KERN_INFO "sprdfb: [%s]: unknown cmd(%d)\n", __FUNCTION__, cmd);
 		break;
@@ -959,7 +968,7 @@ static int sprdfb_shutdown(struct platform_device *pdev)
 	pr_debug(KERN_INFO "sprdfb: [%s] \n", __FUNCTION__);
 
 	if (!lock_fb_info(fb))
-		return ;
+		return -1;
 
 	sprdfb_power(dev, 0);
 	unlock_fb_info(fb);

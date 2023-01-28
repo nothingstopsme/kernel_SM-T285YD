@@ -284,6 +284,8 @@ dtb-$(CONFIG_MACH_GTEXSLTE) += sprd-scx35l_sharkls_gtexslte_rev00.dtb \
 				sprd-scx35l_sharkls_gtexslte_rev03.dtb
 ifeq ($(CONFIG_GTEXSLTE_DS),y)
 dtb-$(CONFIG_MACH_GTEXSLTE) += sprd-scx35l_sharkls_gtexslte_rev04.dtb
+#dtb-$(CONFIG_MACH_GTEXSLTE) += sprd-scx35l_sharkls_gtexslte_rev04_earlymount.dtb
+#dtb-$(CONFIG_MACH_GTEXSLTE) += sprd-scx35l_sharkls_gtexslte_rev04_sdcard_cache.dtb
 endif				
 dtb-$(CONFIG_MACH_SP9630EA3MN) += sprd-scx35l_sp9630ea3mn.dtb
 dtb-$(CONFIG_MACH_SP9630EA4MN) += sprd-scx35l_sp9630ea4mn.dtb

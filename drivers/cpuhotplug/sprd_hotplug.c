@@ -1480,6 +1480,11 @@ void sprd_tb_thread()
 }
 #endif
 
+#if 0
+/* 
+* the same function has been defined in drivers/cpufreq/cpufreq_sprdemand.c,
+* so undefining this one
+*/
 int cpu_core_thermal_limit(int cluster, int max_core)
 {
 
@@ -1496,6 +1501,7 @@ int cpu_core_thermal_limit(int cluster, int max_core)
 
 	return 0;
 }
+#endif
 
 static void __init sprd_hotplug_init(void)
 {

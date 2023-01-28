@@ -80,3 +80,11 @@ config PROC_AVC
 	default n
 	help
 	  support logging audit avc message
+
+config PROC_DEVICETREE
+	bool "support (/proc/device-tree)"
+	depends on PROC_FS
+	default y
+	help
+	  Exposing the device tree content through /proc file system.
+

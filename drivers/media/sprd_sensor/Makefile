@@ -5,7 +5,7 @@ common-file := csi2/csi_access.o csi2/csi_driver.o csi2/csi_log.o csi2/csi_syste
 sprd_sensor-objs := csi2/csi_api.o
 
 ifeq ($(CONFIG_64BIT),y)
-sprd_sensor-objs += compat_sensor_drv_k.o $(common-file)
+sprd_sensor-objs += compat_sensor_drv_k.o
 endif
 
 sprd_sensor-objs += sensor_drv_k.o $(common-file)

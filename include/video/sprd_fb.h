@@ -13,6 +13,8 @@
 #ifndef _SPRD_FB_H_
 #define _SPRD_FB_H_
 
+#include <linux/ioctl.h>
+
 #define SPRD_LAYERS_IMG (0x1)   /*support YUV & RGB*/
 #define SPRD_LAYERS_OSD (0x2)   /*support RGB only*/
 
@@ -71,6 +73,14 @@ typedef struct overlay_display_setting{
 	overlay_setting_rect rect;
 	int display_mode;
 }overlay_display_setting;
+
+typedef struct sprdfb_dma_export{
+	__u32 offset;
+	__u32 size;
+	int fd;
+	__u32 flags;
+} sprdfb_dma_export;
+
 
 /*
 int sprdfb_IOinit(void);

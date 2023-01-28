@@ -209,7 +209,14 @@ endif
 # >$< substitution to preserve $ when reloading .cmd file
 # note: when using inline perl scripts [perl -e '...$$t=1;...']
 # in $(cmd_xxx) double $$ your perl vars
-make-cmd = $(subst \\,\\\\,$(subst \#,\\\#,$(subst $$,$$$$,$(call escsq,$(cmd_$(1))))))
+#make-cmd = $(subst \\,\\\\,$(subst \#,\\\#,$(subst $$,$$$$,$(call escsq,$(cmd_$(1))))))
+
+#1. Escaping single quotation marks in a single-quoted string with the quote-combo '"'"', i.e., (ending of the single-quoted string for the content before)(a single quotation mark in a double-quoted string)(beginning of the single-quoted string for the content after)
+#2. Using $(hash_symbol) to reference the hash symbol '#' to prevent potential interpretation issues
+#3. Appending the content with a whitespace, so that if there is an ending backslash, it will not be interpreted as continuation to the next line when the content is read back through the 'include' operation
+#4. With 3., there seems no need to escape backslash symbols, as make-cmd, when accessed in a shell, is always evaluated in a single-quoted string
+hash := \#
+make-cmd = $(subst $(hash),\$(hash),$(subst $$,$$$$,$(subst $(squote),$(squote)"$(squote)"$(squote),$(cmd_$(1)))))$(space)
 
 # Find any prerequisites that is newer than target or that does not exist.
 # PHONY targets skipped in both cases.
